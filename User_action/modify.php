@@ -153,6 +153,7 @@
             $donnees = $reqComexec->fetchAll();
             foreach($donnees as $com)
             {
+                print_r($donnees);
                 $requeteCom = "DELETE FROM coms WHERE comsid=\"".$com['comsid']."\";";
                 $bdd->prepare($requeteCom)->execute();
                 $minCom = "UPDATE images SET nbcom = nbcom - 1 WHERE imagesid=\"".$com['imagesid']."\"";
@@ -167,20 +168,21 @@
             $donnees = $reqLikexec->fetchAll();
             foreach($donnees as $like)
             {
+                print_r($like);
                 $reqLike = "DELETE FROM likes WHERE likesid=\"".$like['likesid']."\";";
-                $bdd->prepare($requeteCom)->execute();
+                $bdd->prepare($reqLike)->execute();
                 $minLike = "UPDATE images SET nblike = nblike - 1 WHERE imagesid=\"".$like['imagesid']."\"";
                 $bdd->prepare($minLike)->execute();
             }
             /* ----------------------- suppression de l'utilisateur meme  --------------------------------------*/
-            /*try
+            try
             {
                 $requete3 = "DELETE FROM users WHERE usersid=\"".$_POST['id']."\"";
             }catch(PDOExption $e){echo 'requete3 échouée : ' . $e->getMessage();}
             $bdd->prepare($requete3)->execute();
             echo "requete3= ".$requete3."</br>";
             $_SESSION["user"] = "";
-            header("Location: ../index.php");*/
+            //header("Location: ../index.php");
         }
     }
     else
