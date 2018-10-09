@@ -1,0 +1,92 @@
+.logo{
+    /*height: 65%;*/
+    width: 100%;
+    max-height: 70px;
+    max-width: 100px;
+    padding: none;
+}
+
+.acthome{
+    float: right;
+}
+
+.type:hover{
+    /*border-top: 5px solid salmon;*/
+    background-color: rgb(110, 67, 62);
+}
+
+.user_form{
+    padding-left: 25%;
+}
+
+.user_form > form input{
+    padding:3px;
+    border:1px solid #F5C5C5;
+    border-radius:5px;
+    width:200px;
+    box-shadow:1px 1px 2px #C0C0C0 inset;
+}
+
+.principale img{
+    width: 90%;
+    padding: 15px;
+}
+
+nav li {
+    list-style-type: none;
+}
+
+header{
+    background-color: firebrick;
+    height: 8%;
+    margin-bottom: 20px;
+}
+
+footer{
+    background-color: #c56e6e;
+    height: 5%;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+footer > p{
+    text-align: center;
+    font-family: fantasy;
+    font-style: italic;
+}
+
+nav a{
+    display: inline-block;
+    text-decoration: none;
+}
+
+nav > ul > li >a {
+    padding: 20px;
+    color: #FFF;
+}
+
+nav > ul > li {
+    float: left;
+    margin: 2px;
+    position: relative;
+    width: 12%;
+    height: 90%;
+    font-size: 1vw;
+}
+
+nav{
+    width: 100%;
+    border-radius: 10px;
+}
+
+nav > ul::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+
+nav > ul{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}

@@ -1,0 +1,71 @@
+.photo{
+    padding: 20px;
+}
+
+.gallery img{
+    width: 200px;
+    height: auto;
+    padding: 7px;
+}
+
+.acc 
+{
+    width: 100%;
+    background-color: #74c3c361;
+    height: 50%;
+}
+
+.principale > ul > li {
+    width : 30%;
+    max-width: 300px;
+    align-content: center;
+    list-style: none;
+}
+
+.principale > ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.boutons{
+    padding-left: 15px;
+}
+
+.boutons button{
+    border-radius: 10px;
+}
+
+.affImage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.affImage img{
+    width: 60%;
+    max-width: 1200px;
+    padding: 10px;
+    border: solid #ccc;
+}
+
+.add_comment{
+    display: inline-flex;
+    padding: 10px;
+    width: 60%;
+}
+
+.commentaire {
+    padding: 7px;
+    border: solid #aaaaaa5c;
+    width: 60%;
+    height: auto;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+input[type="textarea"] {
+    width: 60%;
+    height: 90px;
+}
