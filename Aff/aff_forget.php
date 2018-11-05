@@ -13,11 +13,10 @@
         {
             if ($_POST['submit'] == "OK")
             {
-                $email = $_POST['mail'];
-                $reqlog = $bdd->prepare("SELECT login FROM users WHERE mail=\"".$_POST['mail']."\"");
+                $email = htmlspecialchars($_POST['mail']);
+                $reqlog = $bdd->prepare("SELECT login FROM users WHERE mail=\"".htmlspecialchars($_POST['mail'])."\"");
                 $reqlog->execute();
                 $res = $reqlog->fetch();
-                print_r($res);
                 $login = $res['login'];
 
                 $cle = md5(microtime(TRUE)*100000);

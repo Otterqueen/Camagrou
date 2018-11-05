@@ -21,7 +21,12 @@
         <li class="acthome"><a href="./index.php?account=create"><i class="fas fa-user fa-2x"></i> Creer un compte</a></li>
 		<li class="acthome"><a href="./index.php?account=login"><i class="far fa-user fa-2x"></i> Se connecter</a></li>
         <?php } else { ?>
-        <li class="type"><a href="./index.php?photo=add"><i class="fas fa-plus-circle fa-2x"></i> add</a></li>
+        <li class="type"><a href="./index.php?photo=add"><i class="fas fa-plus-circle fa-2x"></i> add</a>
+            <ul class="submenu">
+                <li><a href="./index.php?photo=add"><i class="fas fa-camera"></i>  cam</a></li>
+                <li><a href="./index.php?photo=upl"><i class="far fa-folder-open"></i>  upload</a></li>
+            </ul>
+        </li>
         <li class="type"><a href="./index.php?photo=my"><i class="fas fa-images fa-2x"></i> mes photos</a></li>
 		<li class="acthome"><a href="./index.php?account=modify"><i class="fas fa-user fa-2x"></i> Mon Compte</a></li>
         <li class="acthome"><a href="./index.php?account=logout"><i class="far fa-user fa-2x"></i> Se déconnecter</a></li> <?php } ?>

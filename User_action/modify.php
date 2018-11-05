@@ -9,6 +9,7 @@
         echo 'Connexion échouée : ' . $e->getMessage();
     }
 
+    
     function mdpisvalid($mdp)
     {
         if (preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)#', $mdp))
@@ -48,11 +49,11 @@
     if (isset($_POST['login']) && isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['telephone']))
     {
         if ($_POST['submit'] == 'Modifier mon compte')
-        {
-            $requete = "UPDATE users SET login =\"".$_POST['login']."\", nom = \"".$_POST['nom']."\", 
-                        prenom = \"".$_POST['prenom']."\", tel = \"".$_POST['telephone']."\" , 
-                        mail = \"".$_POST['mail']."\", adr = \"".$_POST['adresse']."\"
-                        WHERE login =\"".$_POST['oldlogin']."\"";
+        {            
+            $requete = "UPDATE users SET login =\"".htmlspecialchars($_POST['login'])."\", nom = \"".htmlspecialchars($_POST['nom'])."\", 
+                        prenom = \"".htmlspecialchars($_POST['prenom'])."\", tel = \"".htmlspecialchars($_POST['telephone'])."\" , 
+                        mail = \"".htmlspecialchars($_POST['mail'])."\", adr = \"".htmlspecialchars($_POST['adresse'])."\"
+                        WHERE login =\"".htmlspecialchars($_POST['oldlogin'])."\"";
             try 
             {
                 $bdd->prepare($requete)->execute();
@@ -78,12 +79,12 @@
             {
                 if (mdpisvalid($_POST['newpasswd']))
                 {
-                   if (auth($_POST['login'], $_POST['passwd'], $bdd))
+                   if (auth(htmlspecialchars($_POST['login']), $_POST['passwd'], $bdd))
                     {
                         $newpswd = hash("whirlpool",$_POST['newpasswd']);
                         try
                         {
-                            $requete2 = "UPDATE users SET mdp =\"".$newpswd."\"WHERE login =\"".$_POST['oldlogin']."\"";
+                            $requete2 = "UPDATE users SET mdp =\"".$newpswd."\"WHERE login =\"".htmlspecialchars($_POST['oldlogin'])."\"";
                         }catch(PDOExption $e){echo 'requete2 échouée : ' . $e->getMessage();}
                         $bdd->prepare($requete2)->execute();
                         header('Location: ../index.php');
@@ -106,15 +107,13 @@
         }
         if ($_POST['submit'] == 'Supprimer mon compte')
         {
-            $requete5 = "SELECT usersid FROM users WHERE login=\"".$_POST['login']."\"";
+            $requete5 = "SELECT usersid FROM users WHERE login=\"".htmlspecialchars($_POST['login'])."\"";
             try
             {
                 $req5 = $bdd->prepare($requete5);
             }catch(PDOExption $e){echo 'requete5 échouée : ' . $e->getMessage();}
             $req5->execute();
-            echo "requete5 = ".$requete5."</br>";
             $donnees = $req5->fetch();
-            print_r($donnees);
             $id = $donnees['usersid'];
             echo ("<form method=\"POST\" action=\"./modify.php\">
                 Etes vous sur ?<br>
@@ -145,7 +144,7 @@
                 $bdd->prepare($requeteSupr)->execute();
             }
             /* ----------------------- suppression des commentaire postes par l'utilisateur  --------------------------------------*/
-            $reqCom = "SELECT comsid FROM coms 
+            $reqCom = "SELECT comsid, imagesid FROM coms 
                         INNER JOIN users on coms.usersid = users.usersid 
                         WHERE coms.usersid = \"".$_POST['id']."\"";
             $reqComexec = $bdd->prepare($reqCom);
@@ -153,7 +152,6 @@
             $donnees = $reqComexec->fetchAll();
             foreach($donnees as $com)
             {
-                print_r($donnees);
                 $requeteCom = "DELETE FROM coms WHERE comsid=\"".$com['comsid']."\";";
                 $bdd->prepare($requeteCom)->execute();
                 $minCom = "UPDATE images SET nbcom = nbcom - 1 WHERE imagesid=\"".$com['imagesid']."\"";
@@ -168,7 +166,6 @@
             $donnees = $reqLikexec->fetchAll();
             foreach($donnees as $like)
             {
-                print_r($like);
                 $reqLike = "DELETE FROM likes WHERE likesid=\"".$like['likesid']."\";";
                 $bdd->prepare($reqLike)->execute();
                 $minLike = "UPDATE images SET nblike = nblike - 1 WHERE imagesid=\"".$like['imagesid']."\"";
@@ -180,9 +177,8 @@
                 $requete3 = "DELETE FROM users WHERE usersid=\"".$_POST['id']."\"";
             }catch(PDOExption $e){echo 'requete3 échouée : ' . $e->getMessage();}
             $bdd->prepare($requete3)->execute();
-            echo "requete3= ".$requete3."</br>";
             $_SESSION["user"] = "";
-            //header("Location: ../index.php");
+            header("Location: ../index.php");
         }
     }
     else

@@ -1,5 +1,9 @@
 <?php
     include("./config/database.php");
+    if (!($_SESSION['user']) || ($_SESSION['user'] ==""))
+    {
+        header('Location: ../index.php?account=login');
+    }
     function affiche_com($bdd)
     {
         $sql = "SELECT comment, usersid FROM coms WHERE imagesid=\"".$_POST['imagesid']."\"";
@@ -125,7 +129,7 @@
     {
         if ($_POST['com']!="")
         {
-            $sql = "INSERT INTO coms (imagesid, usersid, comment) VALUES (\"".$_POST['imagesid']."\",\"".$curentUser."\", \"".$_POST['com']."\")";
+            $sql = "INSERT INTO coms (imagesid, usersid, comment) VALUES (\"".$_POST['imagesid']."\",\"".$curentUser."\", \"".htmlspecialchars($_POST['com'])."\")";
             $bdd->prepare($sql)->execute();
             $addcom = "UPDATE images SET nbcom = nbcom + 1 WHERE imagesid=\"".$_POST['imagesid']."\"";
             $bdd->prepare($addcom)->execute();

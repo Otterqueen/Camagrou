@@ -1,4 +1,9 @@
 <?php
+
+    if (!($_SESSION['user']) || ($_SESSION['user'] ==""))
+    {
+        header('Location: ../index.php?account=login');
+    }
     include("./config/database.php");
     try 
     {

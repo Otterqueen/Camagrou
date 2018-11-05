@@ -1,5 +1,10 @@
 <?php 
 
+    if (!($_SESSION['user']) || ($_SESSION['user'] ==""))
+    {
+        header('Location: ../index.php?account=login');
+    }
+    
     function affiche_gallery()
     {
         include("./config/database.php");
@@ -28,127 +33,141 @@
 
 <div class="photo">
     <center><canvas id="filtre" style="position: absolute; width: 600px; height:450px"></canvas><video id="video"></video>
-    <p><button id="startbutton"><i class="fas fa-camera fa-2x"></i></button></p></center>
+    <p><button id="startbutton" disabled="disabled"><i class="fas fa-camera fa-2x"></i></button></p>
     <form method="POST" action="../all/add_photo.php">
         <input type="hidden" id="hidden" name="data" value=""/>
         <input type="hidden" id="filtre2" name="filtre" value=""/>
         filtres : <select id="filtreSel" name="filtreSel">
             <option value="">-</option>
-            <option value="chi">chi2</option>
+            <option value="chi">chi</option>
             <option value="chat">chat</option>
+            <option value="chat_visage">chat_visage</option>
+            <option value="chaton_visage">chaton_visage</option>
+            <option value="chien_visage">chien_visage</option>
+
         </select>
         <button  type="submit" id="savebutton" disabled="disabled"><i class="far fa-save fa-2x"></i></button>
     </form>
     <canvas id="lol" style="position: absolute; width: 600px; height: 450px;"></canvas>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas"></canvas></center>
     <div class="gallery"><?php affiche_gallery()?></div>
 </div>
 <script>
-    (function() {
-
-    var streaming = false,
-        video        = document.querySelector('#video'),
-        cover        = document.querySelector('#cover'),
-        canvas       = document.querySelector('#canvas'),
-        photo        = document.querySelector('#photo'),
-        startbutton  = document.querySelector('#startbutton'),
-        savebutton  = document.querySelector('#savebutton'),
-        lol          = document.querySelector('#lol'),
-        filtreSel    = document.querySelector('#filtreSel'),
-        width = 600,
-        height = 0;
-
-    navigator.getMedia = ( navigator.getUserMedia ||
-                        navigator.webkitGetUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.msGetUserMedia);
-
-    navigator.getMedia(
+    (function()
     {
-        video: true,
-        audio: false
-    },
-    function(stream) {
-        if (navigator.mozGetUserMedia) {
-        video.mozSrcObject = stream;
-        } else {
-        var vendorURL = window.URL || window.webkitURL;
-        video.srcObject = stream;
-        }
-        video.play();
-    },
-    function(err) {
-        console.log("An error occured! " + err);
-    }
-    );
+        var streaming = false,
+            video        = document.querySelector('#video'),
+            cover        = document.querySelector('#cover'),
+            canvas       = document.querySelector('#canvas'),
+            photo        = document.querySelector('#photo'),
+            startbutton  = document.querySelector('#startbutton'),
+            savebutton  = document.querySelector('#savebutton'),
+            lol          = document.querySelector('#lol'),
+            filtreSel    = document.querySelector('#filtreSel'),
+            width = 600,
+            height = 0;
 
-    video.addEventListener('canplay', function(ev)
-    {
-        if (!streaming) 
-        {
-            height = video.videoHeight / (video.videoWidth/width);
-            video.setAttribute('width', width);
-            video.setAttribute('height', height);
-            canvas.setAttribute('width', width);
-            canvas.setAttribute('height', height);
-            streaming = true;
-            var filtre = document.getElementById('filtreSel');
-            filtre.addEventListener('mouseleave', function(){
-                console.log(filtre.value);
-                var context = document.getElementById('filtre').getContext("2d");
-                if(filtre.value)
-                {
-                    var img = new Image(600,450);
-                    img.onload = function ()
-                    {
-                        context.clearRect(0,0, 600, 450);
-                        context.drawImage(img, 10, 0,280,150);
-                    }
-                    img.src = "../img/"+filtre.value+".png";
-                }
-                else
-                    context.clearRect(0,0, 600, 450);
-                
-            });
-            
-            
-        }
-    }, false);
+        navigator.getMedia = ( navigator.getUserMedia ||
+                            navigator.webkitGetUserMedia ||
+                            navigator.mozGetUserMedia ||
+                            navigator.msGetUserMedia);
 
-    function takepicture() {
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext('2d').drawImage(video, 0, 0, width, height);
-        var data = canvas.toDataURL('image/png');
-        
-        if(filtreSel.value)
+        navigator.getMedia(
         {
-            var img = new Image();
-            img.src = "../img/"+filtreSel.value+".png";
-            img.onload = function ()
+            video: true,
+            audio: false
+        },
+
+        function(stream) {
+            if (navigator.mozGetUserMedia)
             {
-                lol.getContext('2d').clearRect(0,0, 600, 450);
-                lol.getContext('2d').drawImage(img, 10, 0,280,150);
+                video.mozSrcObject = stream;
+            } 
+            else
+            {
+                var vendorURL = window.URL || window.webkitURL;
+                video.srcObject = stream;
             }
+            video.play();
+        },
+
+        function(err)
+        {
+            console.log("An error occured! " + err);
         }
-        else
-            lol.getContext('2d').clearRect(0,0, 600, 450);
-        
-    }
+        );
 
-    startbutton.addEventListener('click', function(ev){
-        takepicture();
-        savebutton.disabled = false;
-        ev.preventDefault();
-    }, false);
+        video.addEventListener('canplay', function(ev)
+        {
+            if (!streaming) 
+            {
+                height = video.videoHeight / (video.videoWidth/width);
+                video.setAttribute('width', width);
+                video.setAttribute('height', height);
+                canvas.setAttribute('width', width);
+                canvas.setAttribute('height', height);
+                streaming = true;
+                var filtre = document.getElementById('filtreSel');
+                filtre.addEventListener('mouseleave', function()
+                {
+                    var context = document.getElementById('filtre').getContext("2d");
+                    if(filtre.value)
+                    {
+                        startbutton.disabled = false;
+                        var img = new Image(600,450);
+                        img.onload = function ()
+                        {
+                            context.clearRect(0,0, 600, 450);
+                            context.drawImage(img, 10, 0,280,150);
+                        }
+                        img.src = "../img/"+filtre.value+".png";
+                    }
+                    else
+                    {
+                        startbutton.disabled = true;
+                        context.clearRect(0,0, 600, 450);
+                    }
+                });
+                
+                
+            }
+        }, false);
 
-    savebutton.addEventListener('click', function(ev){
-        var data = canvas.toDataURL('image/png');
-        var hidden = document.getElementById("hidden");
-        var filtre2 = document.getElementById("filtre2");
-        hidden.value = data;
-        filtre2.value = filtreSel.value;
-    }, false);
+        function takepicture() {
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+            var data = canvas.toDataURL('image/png');
+            
+            if(filtreSel.value)
+            {
+                var img = new Image();
+                img.src = "../img/"+filtreSel.value+".png";
+                img.onload = function ()
+                {
+                    lol.getContext('2d').clearRect(0,0, 600, 450);
+                    lol.getContext('2d').drawImage(img, 10, 0,280,150);
+                }
+            }
+            else
+                lol.getContext('2d').clearRect(0,0, 600, 450);
+            
+        }
 
+        startbutton.addEventListener('click', function(ev)
+        {
+            takepicture();
+            savebutton.disabled = false;
+            ev.preventDefault();
+        }, false);
+
+        savebutton.addEventListener('click', function(ev)
+        {
+            var data = canvas.toDataURL('image/png');
+            var hidden = document.getElementById("hidden");
+            var filtre2 = document.getElementById("filtre2");
+            hidden.value = data;
+            filtre2.value = filtreSel.value;
+        }, false);
     })();
 </script>

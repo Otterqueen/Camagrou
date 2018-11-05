@@ -43,8 +43,8 @@
                 $requete4 = "INSERT INTO users (".$keys." admin) VALUES (".$str." 0)";
                 $bdd->prepare($requete4)->execute();
 
-                $email = $_POST['mail'];
-                $login = $_POST['login'];
+                $email = htmlspecialchars($_POST['mail']);
+                $login = htmlspecialchars($_POST['login']);
                 // creation et insertion de la clé dans la base de données
                 $cle = md5(microtime(TRUE)*100000);
                 $requete5 = "UPDATE users SET clef=\"".$cle."\" WHERE mail like \"".$email."\"";

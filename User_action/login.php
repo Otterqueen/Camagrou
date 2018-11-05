@@ -40,9 +40,9 @@ if (isset($_POST['login']) && isset($_POST['passwd']) && $_POST['submit'])
 {
 	if ($_POST['submit'] == 'OK')
 	{
-		if (auth($_POST['login'], $_POST['passwd']))
+		if (auth(htmlspecialchars($_POST['login']), $_POST['passwd']))
 		{
-			$_SESSION['user'] = $_POST['login'];
+			$_SESSION['user'] = htmlspecialchars($_POST['login']);
 			header('Location: ../index.php');
 			exit;
 		}

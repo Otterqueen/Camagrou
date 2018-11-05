@@ -98,8 +98,11 @@
     {
         if ($_POST['com']!="")
         {
-            $sql = "INSERT INTO coms (imagesid, usersid, comment) VALUES (\"".$_POST['imagesid']."\",\"".$curentUser."\", \"".$_POST['com']."\")";
-            $bdd->prepare($sql)->execute();
+            $com = htmlspecialchars($_POST['com']);
+            $sql = "INSERT INTO coms (imagesid, usersid, comment) VALUES (\"".$_POST['imagesid']."\",\"".$curentUser."\", \" :com \")";
+            $req = $bdd->prepare($sql);
+            $req->bindValue(':com', $com, PDO::PARAM_STR);
+            $req->execute();
             $addcom = "UPDATE images SET nbcom = nbcom + 1 WHERE imagesid=\"".$_POST['imagesid']."\"";
             $bdd->prepare($addcom)->execute();
 
@@ -110,8 +113,7 @@
             $notif = $bdd->prepare($reqNotif);
             $notif->execute();
             $resultNotif = $notif->fetch();
-            print_r($resultNotif);
-            if($resultNotif['notif'] == 1);
+            if($resultNotif['notif'] == 1)
             {
                 require_once("./User_action/evoiemail.php");
                 evoiemail($_POST['imagesid'], $bdd);

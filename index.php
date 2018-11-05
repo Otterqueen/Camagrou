@@ -52,6 +52,8 @@
 					include ("./Aff/cam.php");
 				if ($_GET['photo'] == 'my')
 					include ("./Aff/my.php");
+				if ($_GET['photo'] == 'upl')
+					include ("./Aff/upload.php");
 			}
 			else
 				include ("./Aff/aff_ac.php");

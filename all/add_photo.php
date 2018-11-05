@@ -9,7 +9,7 @@
     }
     session_start();
 
-    if (isset($_POST['filtre']) && ($_POST['filtre'] != "")) 
+    if (isset($_POST['filtre']) && ($_POST['filtre'] != ""))
     {
         $filtre = $_POST['filtre'];
         $data = preg_split('/[,]/',$_POST['data']);
