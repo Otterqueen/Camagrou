@@ -31,7 +31,7 @@
                 Pour rest votre mot de passe, veuillez cliquer sur le lien ci dessous
                 ou copier/coller dans votre navigateur internet.
                 
-                localhost:8008/Aff/aff_reset.php?log='.urlencode($login).'&cle='.urlencode($cle).'
+                http://localhost:8008/Aff/aff_reset.php?log='.urlencode($login).'&cle='.urlencode($cle).'
                 
                 
                 ---------------

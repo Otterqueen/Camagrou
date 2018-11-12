@@ -7,7 +7,7 @@
     
     if (isset($_FILES['photo']))
     {
-        $target_dir = "./img/uploads/";
+        $target_dir = "./img";
         $target_file = $target_dir . basename($_FILES["photo"]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -49,6 +49,9 @@
                             <option value=\"\">-</option>
                             <option value=\"chi\">chi2</option>
                             <option value=\"chat\">chat</option>
+                            <option value=\"chat_visage\">chat_visage</option>
+                            <option value=\"chaton_visage\">chaton_visage</option>
+                            <option value=\"chien_visage\">chien_visage</option>
                         </select>
                         <button  type=\"submit\" id=\"savebutton\"><i class=\"far fa-save fa-2x\"></i></button>
                     </form></center>";

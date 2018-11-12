@@ -65,6 +65,10 @@
     margin: 5px;
 }
 
+.page_bouton
+{
+    display: none;
+}
 
 input[type="textarea"] {
     width: 60%;

@@ -57,12 +57,10 @@
 
     function aff_photo($res, $curentUser, $bdd)
     {
-        $i = 0;
         $res->execute();
         $srcs = $res->fetchAll();
         foreach($srcs as $elem)
         {
-            $i = $i + 1;
             echo "<li><img src=\"".$elem['src']."\"></img><div>";
             echo "<form class=\"boutons\" method=\"POST\" action=\"./index.php?category=".$_GET['category']."\">";
             if (aimedeja($curentUser, $elem['imagesid'], $bdd))
@@ -99,7 +97,7 @@
         if ($_POST['com']!="")
         {
             $com = htmlspecialchars($_POST['com']);
-            $sql = "INSERT INTO coms (imagesid, usersid, comment) VALUES (\"".$_POST['imagesid']."\",\"".$curentUser."\", \" :com \")";
+            $sql = "INSERT INTO coms (imagesid, usersid, comment) VALUES (\"".$_POST['imagesid']."\",\"".$curentUser."\", :com)";
             $req = $bdd->prepare($sql);
             $req->bindValue(':com', $com, PDO::PARAM_STR);
             $req->execute();
@@ -152,17 +150,34 @@
         }
         
         echo "<ul>";
+        $limite = 20;
+        $offset = 0;
+        $nbPhoto = 0;
+        if (!(isset($_GET['page'])))
+            $_GET['page'] = 0;
         if (!(isset($_GET['category'])))
             $_GET['category'] = "default";
         switch($_GET['category'])
         {
             case 'last':
-                $requete = "SELECT src, nblike, nbcom, imagesid  FROM images ORDER BY imagesid DESC;";
+                $requete1 = "SELECT count(*)  FROM images;";
+                $res1 = $bdd->prepare($requete1);
+                $res1->execute();
+                $nbPhoto = $res1->fetch();
+                $limite = $limite*$_GET['page'] +20;
+                $offset = $offset+($_GET['page'] * 20);
+                $requete = "SELECT src, nblike, nbcom, imagesid  FROM images ORDER BY imagesid DESC LIMIT ".$limite." OFFSET ".$offset.";";
                 $res = $bdd->prepare($requete);
                 aff_photo($res, $curentUser, $bdd);
                 break;
             case 'like':
-                $requete = "SELECT src, nblike, nbcom, imagesid FROM images WHERE nblike > 0 ORDER BY nblike DESC;";
+                $requete1 = "SELECT count(*)  FROM images WHERE nblike > 0;";
+                $res1 = $bdd->prepare($requete1);
+                $res1->execute();
+                $nbPhoto = $res1->fetch();
+                $limite = $limite*$_GET['page'] +20;
+                $offset = $offset+($_GET['page'] * 20);
+                $requete = "SELECT src, nblike, nbcom, imagesid FROM images WHERE nblike > 0 ORDER BY nblike DESC, imagesid  DESC LIMIT ".$limite." OFFSET ".$offset.";";
                 $res = $bdd->prepare($requete);
                 aff_photo($res, $curentUser, $bdd);
                 break;
@@ -171,5 +186,26 @@
                 break;
         }
         echo "</ul>";
+        if ($nbPhoto[0]%20 != 0)
+        {
+            $nbpage_max = ($nbPhoto[0] / 20) +1;
+        }
+        else
+        {
+            $nbpage_max = ($nbPhoto[0] / 20);
+        }
+
+        if ($nbPhoto[0] > 20)
+        {
+            $page = $_GET['page'] + 1;
+            echo "<center>";
+            if($page-1 !=0)
+                echo "<a id=\"bouton_next\" href=\"./index.php?category=".$_GET['category']."&page=".($page - 2)."\"><i class=\"fas fa-arrow-left fa-2x\"></i></a>";
+            echo "<b style = \"padding: 5px;\">".$page."</b>";
+            if($page+1 <= $nbpage_max)
+                echo "<a id=\"bouton_next\" href=\"./index.php?category=".$_GET['category']."&page=".$page."\"><i class=\"fas fa-arrow-right fa-2x\"></i></a>";
+            
+            echo "</center>";
+        }
     }
 ?>

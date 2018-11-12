@@ -62,7 +62,7 @@
             {
                 try
                 {
-                    $requeteNotif = "UPDATE users SET notif=FALSE";
+                    $requeteNotif = "UPDATE users SET notif=FALSE WHERE login =\"".htmlspecialchars($_POST['oldlogin'])."\"";
                 }catch(PDOExption $e){echo 'requeteNotif échouée : ' . $e->getMessage();}
                 $bdd->prepare($requeteNotif)->execute();
             }
@@ -70,7 +70,7 @@
             {
                 try
                 {
-                    $requeteNotif = "UPDATE users SET notif=TRUE";
+                    $requeteNotif = "UPDATE users SET notif=TRUE WHERE login =\"".htmlspecialchars($_POST['oldlogin'])."\"";
                 }catch(PDOExption $e){echo 'requeteNotif échouée : ' . $e->getMessage();}
                 $bdd->prepare($requeteNotif)->execute();
             }

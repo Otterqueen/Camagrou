@@ -134,6 +134,19 @@
             $addcom = "UPDATE images SET nbcom = nbcom + 1 WHERE imagesid=\"".$_POST['imagesid']."\"";
             $bdd->prepare($addcom)->execute();
         }
+
+
+        $reqNotif = "SELECT notif FROM users 
+                        INNER JOIN images ON images.usersid = users.usersid 
+                        WHERE images.usersid = users.usersid AND images.imagesid = ".$_POST['imagesid'].";";
+        $notif = $bdd->prepare($reqNotif);
+        $notif->execute();
+        $resultNotif = $notif->fetch();
+        if($resultNotif['notif'] == 1)
+        {
+            require_once("./User_action/evoiemail.php");
+            evoiemail($_POST['imagesid'], $bdd);
+        }
         $requete = "SELECT src, nblike, nbcom, imagesid  FROM images WHERE imagesid=\"".$_POST['imagesid']."\";";
         $res = $bdd->prepare($requete);
         $res->execute();

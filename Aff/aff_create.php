@@ -1,4 +1,10 @@
 <?php
+
+	if(isset($_GET['wrong']))
+	{
+		echo '<script>confirm("le '.$_GET['wrong'].' exite deja, choisis-en un autre");</script>';
+	}
+	
 ?>
 <h2 style="text-align: center;"> Inscription à Camagru</h2>
 <div class ="user_form">

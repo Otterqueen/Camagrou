@@ -18,7 +18,7 @@
         Votre photo du '.$date.' a un nouveau commentaire !
         Allez vite voir :)
         
-        http://localhost:8008/index.php?category=last
+        http://localhost:8008/index.php?photo=my
         
         ---------------
         Ceci est un mail automatique, Merci de ne pas y répondre.';
